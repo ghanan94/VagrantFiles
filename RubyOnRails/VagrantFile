@@ -1,3 +1,10 @@
+private_ip          = '192.168.123.100'
+private_http_port    = 80
+public_http_port     = 4567
+mysql_root_password = 'devenv123'
+name                = 'Ghanan Gowripalan'
+email               = 'ghanan94@gmail.com'
+
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -43,8 +50,8 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network :private_network, ip: '192.168.123.100'
-  config.vm.network "forwarded_port", guest: 80, host: 4567
+  config.vm.network 'private_network', ip: private_ip
+  config.vm.network 'forwarded_port', guest: private_http_port, host: public_http_port
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -98,13 +105,13 @@ Vagrant.configure(2) do |config|
     # Install GIT
     sudo apt-get install -y git
     
-    # Install MySql with username 'root' and password 'devenv123'
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password devenv123'
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password devenv123'
+    # Install MySql with username 'root' and password '#{mysql_root_password}'
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password #{mysql_root_password}'
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password #{mysql_root_password}'
     sudo apt-get install -y mysql-server mysql-client libmysqlclient-dev # libmysqlclient-dev for mysql gem 
-    sudo sed -i 's/127.0.0.1/192.168.123.100/g' /etc/mysql/my.cnf
+    sudo sed -i 's/127.0.0.1/#{private_ip}/g' /etc/mysql/my.cnf
     sudo service mysql restart
-    mysql --user="root" --password="devenv123" --execute="GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'devenv123';"
+    mysql --user="root" --password="#{mysql_root_password}" --execute="GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '#{mysql_root_password}';"
     
     
     # Install PGP key and add HTTPS support for APT (Passenger)
@@ -154,8 +161,8 @@ Vagrant.configure(2) do |config|
     
     # Initial Git stuff
     git config --global push.default simple
-    git config --global user.name 'Ghanan Gowripalan'
-    git config --global user.email 'ghanan94@gmail.com'
+    git config --global user.name '#{name}'
+    git config --global user.email '#{email}'
   SHELL
 
   
@@ -163,6 +170,7 @@ Vagrant.configure(2) do |config|
     sudo service nginx restart
     sudo service mysql restart
     sudo passenger-config validate-install --auto
-    echo "Done Vagrant initialization. Setup on ip 192.168.123.100, host port 4567 forwared to guest port 80"
+    echo "Done Vagrant initialization. Setup on ip #{private_ip}"
+    echo "HTTP: host port #{public_http_port} forwared to guest port #{private_http_port}"
   SHELL
 end
