@@ -159,6 +159,11 @@ Vagrant.configure(2) do |config|
     gem install --no-ri --no-rdoc bundler
     bundle install --path vendor/bundle
     
+    # Initialize db
+    bin/rake db:create
+    bin/rake db:migrate
+    bin/rake db:seed
+
     # Initial Git stuff
     git config --global push.default simple
     git config --global user.name '#{name}'
@@ -174,3 +179,4 @@ Vagrant.configure(2) do |config|
     echo "HTTP: host port #{public_http_port} forwared to guest port #{private_http_port}"
   SHELL
 end
+
