@@ -95,7 +95,7 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    sudo apt-get update -y
+    sudo apt-get update
     sudo apt-get upgrade -y
 
     sudo update-alternatives --set editor /usr/bin/vim.basic
@@ -108,7 +108,7 @@ Vagrant.configure(2) do |config|
     # Mongodb
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
     echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
-    sudo apt-get update -y
+    sudo apt-get update
     sudo apt-get upgrade -y
     sudo apt-get install -y mongodb-org
     sudo sed -i 's/127.0.0.1/127.0.0.1,#{private_ip}/g' /etc/mongod.conf
@@ -136,9 +136,6 @@ Vagrant.configure(2) do |config|
 
     # Install NTP
     sudo apt-get install -y ntp
-
-    sudo apt-get update -y
-    sudo apt-get upgrade -y
   SHELL
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
