@@ -1,6 +1,6 @@
 private_ip          = '192.168.123.103'
 private_http_port    = 80
-public_http_port     = 4569
+public_http_port     = 4570
 name                = 'Ghanan Gowripalan'
 email               = 'ghanan94@gmail.com'
 
