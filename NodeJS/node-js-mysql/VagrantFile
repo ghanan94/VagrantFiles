@@ -159,6 +159,9 @@ Vagrant.configure(2) do |config|
     gem install --no-ri --no-rdoc bundler
     bundle install --path vendor/bundle
 
+    # Install project dependancies
+    npm install
+
     # Initial Git stuff
     git config --global push.default simple
     git config --global user.name '#{name}'
